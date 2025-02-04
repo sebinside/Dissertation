@@ -1,0 +1,57 @@
+\documentclass[format=a4-sdq]{sdqdiss}
+
+\usepackage[2020/10/01]{latexrelease}
+\usepackage{customizations/_all}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[german=guillemets]{csquotes}
+
+\newcommand{\Abstract}[1][Abstract]{\chapter*{#1}\addcontentsline{toc}{chapter}{#1}\markboth{#1}{#1}} 
+\addbibresource{bibliography/own.bib} % has to be imported first in order to make the label magic work
+\addbibresource{bibliography/phd.bib} % this file is generated out of Zotero
+\addbibresource{bibliography/custom.bib} % additional bibliography
+
+\input{metadata}
+
+\begin{document}
+
+\selectlanguage{ngerman}
+\maketitle
+
+\thispagestyle{empty}
+\null
+\vfill
+\input{content/special/00_License.tex}
+
+\newpage
+\thispagestyle{empty}
+\null
+\input{content/special/01_Quote}
+
+\frontmatter
+\input{content/special/02_Abstract}
+\input{content/special/03_Thanks}
+
+\selectlanguage{english}
+
+\renewcommand\lstlistlistingname{List of Listings}
+\tableofcontents
+\listoffigures
+\listoftables
+\listofalgorithms
+\lstlistoflistings
+
+\chapter*{\acrolistname}\addcontentsline{toc}{chapter}{\acrolistname}\markboth{\acrolistname}{\acrolistname}%
+\printacronyms
+
+\mainmatter
+
+\input{content/_allContent.tex}
+
+\printbibliography[heading=bibintoc]
+
+\appendix
+\input{content/special/04_Appendix.tex}
+
+\end{document}

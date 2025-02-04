@@ -1,0 +1,48 @@
+
+% Box template
+\newcommand{\highlight}[3]{%
+  \begin{tcolorbox}[
+    colback=black!2!white,
+    colframe=white!20!black,
+    center,
+    valign=top,
+    halign=left,
+    before skip=0.3cm,
+    after skip=0.4cm,
+    center title,
+    boxrule=1pt,
+    boxsep=-2pt,
+    top=7pt,
+    bottom=7pt,
+    left=10pt,
+    right=10pt,
+    width=\linewidth
+  ]
+  #1\xspace\textbf{#2:} #3
+  \end{tcolorbox}
+}
+
+
+% Findings, research questions, further reading
+\newcommand{\finding}[1]{\highlight{\faInfoCircle}{Finding}{#1}}
+\newcommand{\furtherreading}[1]{\highlight{\faChevronCircleRight}{Further reading}{#1}}
+
+\newcommand{\researchgoal}[1]{\highlight{\faExclamationCircle}{Research Goal}{#1}}
+
+\newcommand{\researchquestion}[2]{\highlight{\faQuestionCircle}{Research Question #1}{#2}}
+\newcommand{\RQ}[1]{\hyperref[rq:#1]{\faQuestionCircle~\textbf{Research Question #1}\xspace}}
+\newcommand{\C}[1]{\hyperref[sec:overview:contributions]{\textbf{C#1}\xspace}}
+\newcommand{\PR}[2]{\hyperref[p:#1:#2]{\textbf{P#2}\xspace}}
+\newcommand{\U}[1]{\hyperref[sec:runningexample:uncertainty]{\textbf{U#1}\xspace}}
+\newcommand{\level}[1]{\hyperref[awarenesslevel:#1]{\textbf{L#1}\xspace}}
+
+
+\newcommand{\ResearchGoal}[0]{\researchgoal{Define a classification of uncertainty sources regarding confidentiality using the software architectural abstraction. 
+Provide architecture-based analyses that predict the impact of uncertainty sources and assist software architects in identifying confidentiality violations with respect to uncertainty.}}
+
+% RQ definitions
+\newcommand{\RQone}[0]{\researchquestion{1}{How to identify, describe and classify software-architectural uncertainty regarding its relation to and impact on confidentiality?}}
+
+\newcommand{\RQtwo}[0]{\researchquestion{2}{How to propagate classified uncertainty sources based on architectural modeling to predict their impact on a system's confidentiality?}}
+
+\newcommand{\RQthree}[0]{\researchquestion{3}{How to analyze confidentiality requirements using architectural data flow analysis with respect to uncertainty within the model?}}

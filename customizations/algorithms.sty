@@ -1,0 +1,71 @@
+% Algorithms, adapted from Heiko
+\RequirePackage{algorithm}
+\counterwithin{algorithm}{chapter}
+\RequirePackage{algpseudocode}
+\newcommand{\algorithmautorefname}{Algorithm}
+
+% Original code from Heiko, fixes the line issue BUT references the wrong algorithm if #algorithms > 1
+%\makeatletter
+% Correct line references to algorithms with autoref
+%\patchcmd{\ALG@step}{\addtocounter{ALG@line}{1}}{\refstepcounter{ALG@line}}{}{}
+%\@addtoreset{ALG@line}{algorithm}
+%\newcommand{\ALG@lineautorefname}{Line}
+%% Place algorithm at top, bottom or floating (default contains "h")
+%\def\fps@algorithm{tbp}
+%\makeatother
+
+% Code that fixes this bug
+% Source: https://tex.stackexchange.com/questions/684241/referencing-lines-in-more-than-one-algorithm
+\newcounter{algoline}[algorithm]
+\renewcommand{\thealgoline}{\arabic{algoline}}
+
+\makeatletter
+\patchcmd{\ALG@step}{\addtocounter{ALG@line}{1}}{\stepcounter{ALG@line}\refstepcounter{algoline}}{}{}
+\newcommand{\algolineautorefname}{Line}
+% Place algorithm at top, bottom or floating (default contains "h")
+\def\fps@algorithm{tbp}
+\makeatother
+
+\newcommand{\algblockskip}{\vspace{0.3\baselineskip}}
+\newcommand{\algindentskip}{\vspace{0.2\baselineskip}}
+
+% hello, i made this on my own, im proud
+\newcommand{\Break}{\textbf{break}}
+\newcommand{\datatype}[1]{\texttt{#1}}
+
+% Math, from Heiko, no bugs
+\RequirePackage{bbm}
+\newcommand{\set}[1]{\mathbbm{#1}}
+\newcommand{\setted}[1]{\{ #1 \}}
+\newcommand{\tuple}[1]{\mathfrak{#1}}
+\newcommand{\tupled}[1]{\langle #1 \rangle}
+\newcommand{\bigtupled}[1]{\big\langle #1 \big\rangle}
+\newcommand{\sequence}[1]{#1[]}
+\newcommand{\sequenceindex}[2]{#1[#2]}
+\newcommand{\sequenced}[1]{[#1]}
+\newcommand{\inverse}[1]{#1^{T}}
+\newcommand{\function}[1]{\textsc{#1}}
+\newcommand{\instances}[1]{I_{#1}}
+\newcommand{\var}[1]{\mathit{#1}}
+\newcommand{\propertyset}[2]{\set{#1}_{#2}}
+\newcommand{\propertysettuple}[2]{\tuple{#1}_{#2}}
+\newcommand{\propertyvalueset}[2]{\set{#1}_{#2}}
+\newcommand{\propertyvaluesettuple}[2]{\tuple{#1}_{#2}}
+\newcommand{\propertycollection}[1]{\set{P}_{#1}}
+\newcommand{\propdisplay}[1]{\var{#1}}
+
+\RequirePackage{mathtools}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Own math (much wow)
+\newcommand{\flow}[2]{\var{#1} \rightarrow \var{#2}}
+
+% More stuff from the internet why does this never end
+\algnewcommand\algorithmicswitch{\textbf{switch}}
+\algnewcommand\algorithmiccase{\textbf{case}}
+\algnewcommand\algorithmicassert{\texttt{assert}}
+\algnewcommand\Assert[1]{\State \algorithmicassert(#1)}%
+\algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\ \algorithmicdo}{\algorithmicend\ \algorithmicswitch}%
+\algdef{SE}[CASE]{Case}{EndCase}[1]{\algorithmiccase\ #1}{\algorithmicend\ \algorithmiccase}%
+\algtext*{EndSwitch}%
+\algtext*{EndCase}%

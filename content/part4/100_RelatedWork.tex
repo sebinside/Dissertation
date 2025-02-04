@@ -1,0 +1,570 @@
+\chapter{Related Work}%
+\label{ch:relatedwork}%
+ 
+
+In this chapter, we present other work that is related to our contributions\footnote{We are well aware of the advances of generative artificial intelligence in summarizing research articles. Therefore, we assume that handwritten sections on related work---such as this one---could soon become obsolete. Thus, we focus on providing an understandable overview.}.
+As the title of this thesis implies, our contributions revolve around three central topics: Uncertainty, software architecture, and confidentiality.
+These topics represent the foundations of our work, presented in \autoref{ch:foundations}.
+Related work exists in all intersections of these topics.
+Thus, we structure related work by iteratively investigating work in these areas.
+
+The remainder of this chapter is structured as follows:
+We summarize work from the software engineering and software architecture research community that also addresses uncertainty.
+Then, we focus on architecture-based approaches to security and confidentiality.
+Last, we investigate uncertainty-aware approaches to confidentiality that do not require architectural abstraction.
+This dissertation is at the center of these areas, combining aspects of confidentiality, software architecture, and uncertainty-related research.
+
+\ownpublications{
+\fancycite{hahner_dealing_2021}, 
+\fancycite{hahner_architectural_2021}, 
+\fancycite{boltz_handling_2022},
+\fancycite{walter_architectural_2022},\linebreak
+\fancycite{hahner_classification_2023},
+\fancycite{hahner_model-based_2023},
+\fancycite{hahner_architecture-based_2023}, 
+\fancycite{camara_uncertainty_2024},
+\fancycite{boltz_extensible_2024},
+\fancycite{hahner_arcn_2024}
+}
+
+
+
+
+
+\section{Uncertainty and Software Architecture}%
+\label{sec:relatedwork:uncertaintyXarchitecture}
+
+The intersection of research on uncertainty and software architecture represents the largest field investigated in this chapter.
+This is no surprise, as also the vast majority of our publications were presented at conferences and workshops that belong to these research communities.
+Furthermore, uncertainty is often discussed using model-based approaches common in software architectural research \cite{troya_uncertainty_2021,sobhy_evaluation_2021}.
+We start by giving an overview of surveys and research roadmaps of both communities.
+Afterward, we briefly summarize publications on uncertainty taxonomies and approaches related to \acfp{SAS}.
+Then, we summarize the comprehensive work that has been conducted to optimize software architectures or to use architectural knowledge in uncertainty-aware analysis.
+Another relation of both areas are design decisions, as already discussed with the \emph{cone of uncertainty} \cite{mcconnell_software_1998}, see \autoref{sec:foundations:uncertainty}.
+Last, we summarize work that focusses on uncertainty management and sharing architectural knowledge.
+
+
+\subsection{Surveys and Research Roadmaps}
+
+Recently, two large surveys were conducted within the \acf{SAS} community that are related to our work.
+\textcite{troya_uncertainty_2021} conducted a \acf{SLR} and the modeling of uncertainty.
+They investigate 123 primary studies to better understand the notions and formalisms used to represent uncertainty.
+Furthermore, they discuss when uncertainty is analyzed and whether such analysis is tool-supported.
+They present a comprehensive collection of formalisms used to represent uncertainty, e.g., variability models, fuzzy logic, or temporal logic.
+Their results indicate a lack of analysis approaches that are able to handle heterogeneous uncertainty types, such as presented in \autoref{sec:impactanalysis:ufd}.
+They also highlight the need for consolidated modeling solutions, as currently driven with the \acf{OMG} \acf{PSUM} \cite{PSUM} standard.
+Furthermore, they mention the need of tool-supported processes, which we address with \abunai, \uia, and \arcen.
+Regarding design time analyses like the one presented in this thesis, the most common approach are variability models, such as the uncertainty meta model presented in \autoref{sec:confidentialityanalysis:abunai}.
+We conclude that our contributions use  techniques well-known from the state of the art, but surpass related work by providing comprehensive modeling support for heterogeneous uncertainty and tool-supported analyses.
+
+\textcite{hezavehi_uncertainty_2021} present an overview of the research community based on questionnaires.
+In two stages, they investigate uncertainty concepts, sources, methods, and challenges.
+Their results motivate the design time analysis of uncertainty, which includes both uncertainty sources internal and external to the system under study.
+They state that \enquote{only when enough knowledge is not available at design time, [\dots], uncertainty handling should be postponed to run-time} \cite{hezavehi_uncertainty_2021}.
+Moreover, they find that the current state of the art lacks in including non-functional requirements both as optimization goal as well as side effects.
+We address this shortcoming and the problem of dealing with concurrent sources of uncertainty in \autoref{ch:impactanalysis}
+By providing a procedure to handle uncertainty in \autoref{sec:overview:procedure} and collecting uncertainty sources in \autoref{sec:classification:collaboration}, we also partially address the challenges of consolidating knowledge, providing guidelines, and dealing with unanticipated change.
+Last, the authors present an initial reference process that shows many activities that are also contained in the procedure presented in \autoref{sec:overview:procedure}, e.g., uncertainty identification, modeling, and propagation.
+\textcite{calinescu_understanding_2020} provide the findings of another survey in the \acp{SAS} community, focussed on understanding uncertainty.
+They also highlight the challenges of dealing with unanticipated change and enhancing the explainability of \acp{SAS}.
+With \arcen, we provide a step towards addressing these challenges in \autoref{sec:classification:identification}.
+We conclude that our approach fits current research challenges.
+
+Research roadmaps light current research directions and provide agendas and research challenges.
+Here, \textcite{de_lemos_software_2013} describe a general roadmap regarding the research on \acp{SAS}.
+They especially highlight the challenge of the design space's size.
+We discussed this issue and how to address the combinatorial explosion regarding data flow analysis and confidentiality in \autoref{sec:confidentialityanalysis:complexity}.
+To also at least partially tackle the identified challenge regarding processes, we describe a procedure with activities and roles in \autoref{sec:overview:procedure}.
+More recently, \textcite{weyns_towards_2023} describe their findings on current challenges regarding uncertainty management.
+They highlight the need for understanding uncertainty and providing end-to-end approaches.
+We present a tailored classification in \autoref{sec:classification:classification}, and a procedure that starts at the identification of uncertainty in \autoref{ch:classification} and ends after analyzing issues due to uncertainty in \autoref{ch:confidentialityanalysis}.
+Thereby, we address these challenges regarding confidentiality as a non-functional requirement.
+
+
+\subsection{Uncertainty Taxonomies and Classifications}
+
+To better understand uncertainty, researchers created several taxonomies \cite{bures_capturing_2020,esfahani_uncertainty_2013,mahdavi-hezavehi_classification_2017,perez-palacin_uncertainties_2014,ramirez_taxonomy_2012,walker_defining_2003,PSUM,camara_uncertainty_2017}.
+\textcite{walker_defining_2003} present a taxonomy of uncertainty using three dimensions. 
+The \emph{location} describes where the uncertainty can be found, e.g., in the model input or context. 
+The \emph{nature} distinguishes between epistemic (i.e., lack of knowledge) and aleatory (i.e., natural variability) uncertainty. 
+Last, the \emph{level} describes how much is known about the uncertain influence.
+Although this taxonomy has been the baseline for many others, it does not specifically aim to describe software-related uncertainty.
+\textcite{perez-palacin_uncertainties_2014} build on this classification in the context of \acp{SAS}. 
+They thereby adjust the dimension \emph{location} to better fit software models.
+\textcite{bures_capturing_2020} adapt this taxonomy again to \enquote{fit the needs of uncertainty in access control} \cite{bures_capturing_2020}.
+Although this work only considers access control in Industry 4.0 scenarios, it is also a good foundation for our classification, presented in \autoref{sec:classification:classification}.
+\textcite{esfahani_uncertainty_2013} describe characteristics of uncertainty and hereby focus on the variability and reducibility of different sources of uncertainty.
+They highlight the problem of uncertainty in the environment of a software system, e.g., due to the deployment.
+\textcite{mahdavi-hezavehi_classification_2017} propose a classification framework of uncertainty.
+They aim at architecture-based, \acp{SAS} but do also not consider security, privacy, or confidentiality.
+Also related is the uncertainty template by \textcite{ramirez_taxonomy_2012}.
+They present a scheme to describe uncertainty sources for dynamically adaptive systems in requirements, design, and runtime.
+Due to the different scope, they describe uncertainty in software architecture as \emph{inadequate design} which is not precise enough to identify the impact of software-architectural \cite{hahner_classification_2023} uncertainty on confidentiality.
+Still, they also list \emph{unexplored alternatives} and \emph{misinformed trade-off analysis} which motivates our work.
+\textcite{armour_five_2000} presents the order of ignorance which also influenced many of the aforementioned taxonomies, e.g., the work of \textcite{perez-palacin_uncertainties_2014}.
+
+More recently, the \ac{OMG} \ac{PSUM} \cite{PSUM} standard represents a joint effort towards the standardization of terminology to describe uncertainty.
+However, at the time of writing, this still represents a work in progress.
+A more in-depth discussion of related classifications can be found in \autoref{sec:classification:investigating}.
+There, we not only show in detail all existing dimensions but also where we adapt or innovate on the state of the art.
+This question is also part of our third evaluation goal \goal{3}, presented in \autoref{sec:evaluation:first}.
+We conclude that there has been a substantial effort in the last decades to classify uncertainty.
+Based on the comprehensive findings of related work we present a novel classification tailored to confidentiality.
+Revisiting related work underlines both the need for tailored classification systems and the appropriateness of our classification to confidentiality, see \autoref{sec:classification:investigating} and \autoref{sec:evaluation:first}.
+
+
+\subsection{Architecting Self-Adaptive Systems}
+
+As discussed in \autoref{sec:foundations:uncertainty} and in \autoref{sec:classification:relation}, uncertainty is central topic in the \acp{SAS} research community.
+However, the software architectures considered in this thesis are not self-adaptive, and further research is required to understand the implications of our findings for such software systems completely.
+Nevertheless, we briefly summarize related work in this field.
+
+The \emph{Rainbow} framework by \textcite{garlan_rainbow_2004} enables architecture-based self-adaptation.
+The architecture layer comprises an adaptation engine and logic for constraint evaluation to monitor the runtime system and to adapt in case of occurring issues, e.g., regarding the system performance.
+As this evaluation is model-based, we argue that our approach could be integrated into this framework to simplify its use at runtime.
+Proper modeling and analysis support---such as the one presented in this thesis---is required to identify confidentiality violations \cite{seifermann_architectural_2022,schneider_how_2024}.
+In another publication, the authors present the \emph{Znn.com} system to evaluate the Rainbow framework.
+We build on this software system to present our approach to addressing the \ac{UIP} in \autoref{sec:impactanalysis:ufd}.
+
+\textcite{andersson_modeling_2009} present modeling dimensions of \acp{SAS}, i.e., variation points of said systems.
+They distinguish four groups of dimensions: Goals, changes, mechanisms, and effects.
+In the scope of this work and the already discussed uncertainty classifications, this can be seen as a more general description of the underlying challenges of \acp{SAS}.
+Using our terminology, uncertainties causing changes have sources and types, as described in \autoref{sec:classification:relation}.
+Here, our classification describes a small subset of these dimensions in more detail, justified by the purpose of conducting confidentiality analysis.
+This underlines the relation of our work to \acp{SAS}, as already illustrated in recent publications \cite{weyns_towards_2023,camara_uncertainty_2024}.
+
+\textcite{whittle_relax_2009} present \emph{RELAX}, an approach targeted at considering uncertainty in requirements engineering of \acp{SAS}.
+By weakening requirements depending on the environmental conditions monitored during runtime, self-adaptation can be achieved in a structured manner.
+The authors argue that, compared to ad-hoc approaches, considering uncertainty in requirements helps to describe clear adaptation boundaries and to ensure invariants.
+However, this approach does not consider the development of the system nor provides mechanisms to satisfy the weakened requirements. 
+In addition, it can only cope with environmental uncertainty that is known during formulating the requirements.
+Nevertheless, we argue that revisiting confidentiality requirements under uncertainty represents a promising research direction for future work.
+
+
+\subsection{Architecture Evaluation Under Uncertainty}
+
+The topic of architecture evaluation under uncertainty represents the most comprehensive section of related work.
+Numerous approaches \cite{esfahani_dealing_2012,koziolek_peropteryx_2011,aleti_archeopterix_2009,lytra_supporting_2013,vanherpen_design-space_2014,esfahani_guidearch_2013} have been proposed to evaluate and optimize software architectures.
+They often refer to the variability or inherent uncertainty in software architecture as \emph{design space exploration}, which can also be described as \enquote{searching better or even optimal designs} \cite{koziolek_automated_2011}.
+\textcite{sobhy_evaluation_2021} conducted a \ac{SLR} comprising 48 primary studies on this topic.
+They highlight the focus on design time, which matches our approach.
+We summarize the most related approaches.
+
+\emph{PerOpteryx} \cite{koziolek_peropteryx_2011,martens_automatically_2010,koziolek_automated_2011} is a model-based approach to optimize software architectures regarding quality properties like performance, cost, or reliability.
+\textcite{koziolek_peropteryx_2011} employ evolutionary optimization to find Pareto-optimal architectural candidates.
+To assess the quality of the candidates, they use the Palladio approach, introduced in \autoref{sec:foundations:architecture}.
+However, there is no support for confidentiality, although there is already a PerOpteryx extension for security \cite{busch_modelling_2016}.
+In contrast to our approach, they modeled these by a concept of concerns. 
+These concerns describe which design decisions are dependent on each other. 
+In our analysis we focus on the direct impact on confidentiality.
+Similarly to the relation to Rainbow \cite{garlan_rainbow_2004}, we argue that our approach can be incorporated or combined with PerOpteryx.
+We demonstrated this while defining a scenario-aware data flow analysis regarding structural uncertainty in \autoref{sec:confidentialityanalysis:typespecifc}.
+
+\textcite{esfahani_guidearch_2013} present \emph{GuideArch}, an approach to explore the architectural solution space under uncertainty. 
+This shall enable software architects to identify critical design decisions.
+They apply fuzzy math to represent uncertainty and its impact on the software architecture.
+This enables the comparison of architectural candidates and the exploration of the solution space.
+Although this approach considers uncertainty and fuzziness on the architectural abstraction level, it does not consider confidentiality or other privacy-related quality properties.
+By applying fuzzy methods in graph-aware data flow analysis, we found that their expressiveness is limited regarding confidentiality, which is hard to quantify, see \autoref{sec:confidentialityanalysis:typespecifc}.
+Thus, we argue that the application of GuideArch to analyze confidentiality is not straightforward.
+
+Another design space exploration tool is \emph{ArcheOpterix} by \textcite{aleti_archeopterix_2009}. 
+It can also optimize a given architecture for multiple criteria using evolution techniques and design constraints.
+However, similarly, it does not support a confidentiality analysis, and the design space modeling is more restrictive.
+The quality attributes of \enquote{safety, reliability, security, performance, timeliness, and resource consumption} \cite{aleti_archeopterix_2009} are only considered to be future work for ArcheOpterix.
+At the time of writing, we were unable to find analysis extensions suitable for security, privacy, or confidentiality.
+\textcite{vanherpen_design-space_2014} also present an approach to model-based design space exploration.
+They present a pattern catalog of techniques known from architecture optimization but do not focus on analysis support.
+\textcite{gerasimou_synthesis_2018} present \emph{EvoChecker}, a search-based approach employing evolutionary algorithms in automated model synthesis.
+They focus on quality of service properties like reliability, response time, and cost.
+In sum, design space exploration approaches are versatile, but do often not support security-related attributes but focus, e.g., on performance.
+While these approaches can analyze a wide variety of quality properties, they are not appropriate to consider confidentiality as they lack the required expressiveness to consider data processing and data flow constraints.
+
+Last, there is a relation to the topics of variability, product lines, and testing, as they share similar challenges regarding the size of the design space and combinatorial explosion, as discussed in \autoref{sec:confidentialityanalysis:complexity}.
+Here, \textcite{abbas_modeling_2012} propose to model the variability in quality concerns, thereby expressing what does vary how and for which reason.
+This shall reduce the number of required quality attribute scenarios.
+Another approach is the combination of design models and test models to minimize testing efforts while facing feature interaction and ensuring a comprehensive coverage of interactions.
+\textcite{oster_pairwise_2011} combine pairwise feature generation with model-based testing and \textcite{lochau_model-based_2012} combine feature models and state charts that represent test models.
+The challenge of feature interactions is comparable to dealing with uncertainty interactions, see \autoref{sec:impactanalysis:ufd}.
+By employing the notion of independent \acfp{TFG}, we can minimize the required analysis effort due to interacting uncertainties, see \autoref{sec:confidentialityanalysis:framework}.
+Here, mapping the uncertainty model to the architectural model to minimize the analysis effort is comparable to the mapping applied in related work.
+We require full coverage of all interactions on a single \ac{TFG}, as a missing variation could cause missed confidentiality violations due to uncertainty, see the discussion of recall in \autoref{sec:evaluation:overview}.
+
+
+\subsection{Architecture-Based Analysis}
+
+Besides automatically optimizing software architectures proposed in the previous paragraphs, architectural models are often used as a means to analyze the quality of software architectures or to help in the design process.
+These approaches are closely related to this thesis as we also build on the architectural model to analyze confidentiality.
+In the following, we summarize related architecture-based analyses.
+
+When considering architectural models as a baseline for uncertainty analysis, we first have to address the question of incorporating uncertainty into the model.
+Here, \textcite{garlan_software_2010} proposed already more than a decade ago to consider uncertainty as a first-class entity.
+There are numerous notations for incorporating uncertainties of different types into software models \cite{troya_uncertainty_2021}. 
+For instance, SysML~\cite{object_management_group_omg_2023} and the \acf{UML} MARTE Profile~\cite{object_management_group_uml_2011} provide stereotypes and properties to represent some types of uncertainty, especially measurement uncertainty. 
+However, existing notations allow modeling mostly homogeneous uncertainties, i.e., of the same type.
+The aforementioned \ac{PSUM} standard \cite{PSUM} also provides a metamodel for representing different types of uncertainty but is still a work in progress.
+Regarding measurement uncertainty, \textcite{bertoa_incorporating_2020} propose its inclusion into primitive data types of \ac{UML} models.
+Our modeling approach of uncertainty and our distinction between five central uncertainty types is also inspired by the aforementioned work, see \autoref{sec:classification:investigating}.
+As discussed in \autoref{sec:classification:classification} and \autoref{sec:confidentialityanalysis:typeagnostic}, we can express all identified uncertainty sources \cite{hahner_arcn_2024} as part of the architectural model.
+
+\textcite{famelis_managing_2019} introduce \emph{DeTUM}, which stands for design time uncertainty management.
+This tool-supported approach handles uncertainty using partial models.
+It introduces uncertainty in the start phase and then resolves it in later stages.
+They also refer to open design decisions as a source of uncertainty, similarly to the \emph{cone of uncertainty} \cite{mcconnell_software_1998}, see \autoref{sec:classification:relation}.
+However, the authors do not mention security-related quality attributes like confidentiality.
+They explicitly mention the requirement of external support to assess the impact of uncertainty---as we offer it with our work.
+
+\textcite{goseva-popstojanova_assessing_2003} present an approach for architecture-based reliability analysis under uncertainty.
+Here, values such as the probability that a particular component is used or the reliability of a component contribute to the analysis of uncertainty.
+Using Monte Carlo simulation, the authors can analyze how uncertainty propagates from model parameters into reliability estimations.
+Although we investigate another quality property and use data flow analysis instead Monte Carlo simulation, we argue that our method is comparable.
+Both approaches use appropriate architectural models and derive the impact of uncertainty.
+However, we argue that confidentiality and reliability as quality properties differ fundamentally.
+Therefore, the approach is not suitable for detecting confidentiality breaches, and we are not able to analyze reliability.
+In sum, there exist many approaches to model and analyze uncertainty regarding other quality properties of software architectures. 
+However, they do not explicitly take confidentiality into account.
+
+
+\subsection{Architectural Design Decisions and Uncertainty}
+\acfp{ADD} are related to uncertainty.
+As depicted with the \emph{cone of uncertainty} \cite{mcconnell_software_1998}, open design decisions introduce uncertainty about the software system to design, and making decisions reduces said uncertainty.
+
+\textcite{kruchten_ontology_2004} presents an ontology of \acp{ADD}.
+The author distinguishes between existence, property and executive decisions and provides an overview of \acp{ADD} attributes.
+This is especially relevant when considering uncertainty that can void existing decisions and require software architects to backtrack.
+\textcite{jansen_software_2005} see software architecture as a composition of \acp{ADD}.
+This shows how uncertainty, e.g., about the system context, can hinder good software design as the \emph{best} decision might not be found.
+Although both approaches do not focus on uncertainty, they inspired our classification which is strongly coupled to architectural design, see \autoref{sec:classification:classification}.
+
+\textcite{lytra_supporting_2013} propose the use of fuzzy logic to incorporate inherent uncertainty into reusable \acp{ADD}.
+This shall enable software architects to share and reuse knowledge about the impact of uncertainty on quality attributes.
+They employ a \acf{FIS} to identify the most appropriate design decisions and also foster the importance of decision documentation.
+This is related to our data flow analysis under environmental uncertainty that is also based on fuzzy inference, see \autoref{sec:confidentialityanalysis:typespecifc}.
+Furthermore, we also address knowledge exchange and documentation with our uncertainty catalog, see \autoref{sec:classification:collaboration}.
+Although this approach can also handle security-related quality attributes, violations due to integration issues remain hidden.
+Here, the integration of a dedicated analysis---such as our confidentiality analysis---helps identifying also fine-grained problems.
+Future work could investigate whether defining reusable \acp{ADD} to ensure confidentiality is feasible.
+
+\textcite{zimmermann_reusable_2007} present a framework to support the identification, making, and enforcement of \acp{ADD}.
+This is especially helpful regarding the aforementioned backtracking, i.e., reverting decisions in case of design errors.
+Here, awareness of dependencies minimizes the required effort and the chance of introducing new errors while backtracking.
+\textcite{noppen_jar_software_2008} discuss design decisions under imperfect information by explicitly modeling uncertain aspects of the architecture based on fuzzy techniques and design trees to record the design history.
+\textcite{busari_radar_2017} present the \emph{RADAR} approach \cite{busari_modelling_2019} that comprises a modeling language and decision analysis support.
+They highlight dependencies between decisions and provide support to find Pareto-optimal solutions.
+Although these approaches help to minimize errors during the design and help to recall the decision paths, they do not support analyzing software systems regarding confidentiality.
+Nevertheless, we argue that such frameworks are helpful in combination with modeling and analysis support, which should be investigated in the future.
+
+
+\subsection{Uncertainty Management and Knowledge Sharing}
+
+Regarding the management of uncertainty and \acp{ADD}, the previous paragraphs introduced a multitude of approaches for modeling, analyzing, and optimizing software architectures.
+In the following, we focus on uncertainty management and knowledge sharing beyond the design of single software systems.
+Collecting and consolidating knowledge on architectural design and uncertainty supports software architects \cite{weyns_towards_2023,lytra_supporting_2013,zimmermann_reusable_2007,gerdes_decision_2015}.
+It can help to address unanticipated change that is not completely unforeseen and can be tackled, e.g., by minimizing assumptions or creating reusable system building blocks. \cite{garlan_unknown_2021}.
+The need for uncertainty management, reusable methods, and end-to-end approaches has also been highlighted in the aforementioned surveys and research roadmaps \cite{weyns_towards_2023,weyns_introduction_2020,troya_uncertainty_2021,hezavehi_uncertainty_2021}.
+Knowledge sharing to counter uncertainty is also known from legal sciences \cite{sterz_intelligente_2022}.
+
+With \arcen, we present a catalog of uncertainty sources to overcome the limitation of knowledge being scattered among researchers and institutions.
+A related approach is \emph{Decision Buddy}, a tool-supported collaborative approach regarding design decisions by \textcite{gerdes_decision_2015}.
+By collecting and describing the effects of \acp{ADD}, the decision-making of software architects can be supported with suitable and ranked solutions.
+\emph{privacypatterns.eu} is a web-based collection of patterns to enhance privacy \textcite{colesky_system_2018}.
+The collection comprises patterns like access control, single point of contact, or informed consent \cite{colesky_system_2018-1}
+Last, \emph{arc42} represents an interactive collection of software qualities \cite{starke_arc42_2024}, comprising requirements, definitions, and relations.
+These works provide comparable approaches to our proposed solution but cannot be applied to uncertainty and confidentiality due to the domain gap.
+Additionally, the aforementioned tooling is partially fragile due to link decay \cite{goh_link_2007} or lacks open accessible data.
+To counter such issues and to reach high usability and longevity, our tool support is publicly available, see \autoref{sec:classification:collaboration}.
+Ultimately, we want to stress the importance of efforts towards catalogs and guidelines, especially with regard to cooperation among researchers and science transfer\footnote{The importance of guidelines and checklists was already emphasized by practitioners at EMLS' 21, in the very first workshop in which our approach was discussed \cite{hahner_dealing_2021}. \arcen represents one result of these findings, which received very positive reviews and feedback from the community.}.
+
+\textcite{jasser_reusing_2016} present a repository of security solutions to support \acp{ADD}.
+Exemplary solutions are access control, input sanitization, or the principle of the least privilege.
+Here, the focus on security as a central quality property enables more precise classification, e.g., by relating to sub-goals like confidentiality, integrity, or availability \cite{international_organization_for_standardization_isoiec_2018}.
+We consider this to be highly related to our catalog approach, although we approach the challenge from the opposite direction: Instead of providing solution techniques, we focus on supporting the identification of potential problems in the form of uncertainties.
+
+Last, \textcite{lupafya_framework_2022} present a framework for considering uncertainty in the software design.
+Their conceptual model connects viewpoints to uncertainties, risks and opportunities, and their mitigation or exploitation.
+Furthermore, they present a classification of uncertainty based on consolidating existing work.
+Although the approach looks promising at first sight, it falls short of providing further management, modeling, or analysis support beyond describing uncertainty sources with attributes.
+Furthermore, combining existing classifications without further purpose lacks novelty \cite{kaplan_introducing_2022}.
+
+
+\subsection{Summary}
+
+The intersection of research on software architecture and uncertainty presented in this section represents the largest body of related work.
+According to the aforementioned surveys, the state of the art is still of an exploratory nature, lacks comprehensive tool support \cite{troya_uncertainty_2021,hezavehi_uncertainty_2021}, and does also not focus on confidentiality.
+Our approach addresses this gap regarding confidentiality with ready-to-use tool support that can easily be incorporated into existing approaches.
+Furthermore, related work often inspired us.
+For instance, our classification is based on existing taxonomies but tailored to confidentiality.
+The decision to opt for a web-based and open-source catalog approach was also influenced by the perceived link decay \cite{goh_link_2007} of related work.
+Our approach is by far not the first to incorporate uncertainty modeling in the form of scenarios into the architectural design.
+However, we were unable to find related work that can identify confidentiality violations due to uncertainty.
+We conclude that our approach represents novel work that can be combined with existing frameworks to compose comprehensive end-to-end approaches \cite{weyns_introduction_2020}.
+
+\finding{Related work provides the foundation and inspiration for many aspects of our research.
+However, to the best of our knowledge, there exists no directly comparable approach.
+Ultimately, combining multiple analyses that differ in supported uncertainty sources and targeted quality properties is expedient.}
+
+
+
+
+
+\section{Software Architecture and Confidentiality}%
+\label{sec:relatedwork:architectureXconfidentiality}
+
+The next section of related work we discuss in this thesis represents the intersection of software architecture and confidentiality.
+We present work from the field of model-based security analysis and existing approaches to architectural data flow analysis.
+Afterward, we revisit the specification of confidentiality requirements as they represent one important input to data flow analysis that can impact the accuracy of identified confidentiality violations.
+This includes related work on access control.
+
+
+\subsection{Model-based Security Analysis}
+
+Model-based analyses use the model representation of software systems to evaluate their quality, e.g., by using architectural models.
+They use techniques known from \acf{MDSD}, see \autoref{sec:foundations:mds}.
+\textcite{nguyen_extensive_2015} present a \ac{SLR} based on 108 primary studies.
+They find that the vast majority of papers use standardized notations like the \ac{UML}, but only less than half of the investigated papers consider confidentiality.
+When confidentiality is discussed, it is often combined with considering authentication or authorization.
+Only 11\% of the investigated publications focus on analyzing confidentiality.
+They also find a lack of analyses that simultaneously consider multiple security concerns.
+
+\textcite{goos_umlsec_2002} present \emph{UMLsec} that extends \ac{UML} by defining a security profile \cite{juerjens_principles_2002,goos_towards_2001}. 
+By incorporating security-related information into \ac{UML}, software architects can reuse existing \ac{UML} diagrams for security analysis.
+It supports different kinds of analyses, such as information flow or access control. 
+In contrast to our confidentiality analysis approaches, it does not support access control on data, or more complex confidentiality requirements that go beyond, for instance, encrypted communication.
+Another \ac{UML} security profile is \emph{SecureUML} by \cite{lodderstedt_secureuml_2002}. 
+It supports \acf{RBAC} together with statements in the \acf{OCL} to support dynamic properties in authorization constraints.
+Similarly, there is no support for more advanced constraints regarding confidentiality.
+Although both approaches represent relevant steps towards model-driven security, they both show the lack of comprehensive support for confidentiality beyond access control, or encryption, as already discussed in the aforementioned survey.
+Furthermore, they do not support uncertainty in their analyses.
+Last, \textcite{ronneberg_quantitative_2024} propose information flow analysis in \ac{CBSE}, following the approach of correctness-by-construction to enable security guarantees.
+
+\textcite{walter_architectural_2022-1} present a comprehensive approach to identifying confidentiality violations using attacker propagation \cite{walter_architectural_2022-1,walter_architecture-based_2023} and attack path analysis \cite{walter_architecture-based_2023-1,walter_context-based_2023}.
+They extend the \acf{PCM} \cite{reussner_modeling_2016} to express vulnerabilities and access control with the \acf{XACML} \cite{oasis_extensible_2013}.
+This enables the propagation of attackers within the software architecture.
+After each propagation step, the analysis considers which credentials or access rights the attacker might have obtained, e.g., due to vulnerabilities within the system.
+The approach also considers dependencies within the software architecture.
+For instance, if an attacker gains access to a resource container, this also affects all components deployed on this resource.
+The resulting attack graphs shall help software architects to estimate the impact of vulnerabilities and access control decisions.
+This approach is highly related to our work, as it uses a similar approach to architectural models \cite{reussner_modeling_2016} and architecture-based propagation \cite{hahner_architecture-based_2024,busch_architecture-based_2020}.
+However, it has two limitations regarding our needs.
+First, there is no consideration of data flows, as confidentiality violations are identified by tracing attack paths.
+Second, there is no comprehensive support for considering uncertainty, although initial approaches exist \cite{walter_architecture-based_2023}.
+The authors acknowledge this limitation and state that \enquote{the combination with other uncertainty mitigation approaches} \cite{walter_context-based_2023} could be expedient.
+
+
+\subsection{Data Flow Analysis}
+
+The concept of \acp{DFD} and data flow analysis is not new \cite{demarco_structure_1979}.
+Nevertheless, data flow analysis approaches are often used to assess the security of software systems.
+This can be achieved by building on noninterference like \emph{JOANA} \cite{snelting_checking_2014} or deductive verification like \emph{KeY} \cite{ahrendt_deductive_2016}.
+Other approaches extract data flows from source code without considering the software architecture.
+\emph{RogueOne} by \textcite{sofaer_rogueone_2024} uses data flows to identify rogue updates, i.e., malicious changes to widely used libraries that aim to attack dependent software systems.
+More recently, GitHub \cite{github_codeql_2021} pushes the adoption of \emph{CodeQL} \cite{de_moor_ql_2008} for data flow-based source code analysis and vulnerability detection.
+Due to the broad applicability, such analyses represent promising approaches to analyzing the confidentiality of real-world software.
+However, they lack the connection to the architectural abstraction, which becomes visible, e.g., when considering architecture-related information like the deployment.
+Here, approaches to connect source code analyses and architectural analyses exist, e.g., by \textcite{kramer_model-driven_2017} and \textcite{reiche_modeling_2021}.
+However, they do not consider uncertainty.
+Combining source code analyses with architectural analyses and making uncertainty-aware represents a promising direction for future research.
+With appropriate tool support, \acp{DFD} represent a powerful and commonly used mechanism for threat analysis \cite{bernsmed_adopting_2022} that helps in identifying security-related issues \cite{schneider_how_2024}.
+
+The most related architectural data flow analysis is presented by \textcite{seifermann_detecting_2022}.
+Their approach considers additional context information, such as the deployment, enabling software architects to analyze confidentiality during early design phases. 
+We introduced their underlying meta model for the confidentiality-focused analysis of \acp{DFD} in \autoref{sec:foundations:dfd}.
+Furthermore, they present an approach for label propagation to identify confidentiality violations.
+Software architects can specify and analyze confidentiality requirements regarding noninterference, encryption, or access control.
+A \acf{DSL} \cite{hahner_modeling_2021,hahner_domain-specific_2020} enables the specification of data flow constraints.
+Our data flow analysis framework \cite{boltz_extensible_2024}, introduced in \autoref{sec:confidentialityanalysis:framework}, builds on this approach. 
+However, the original data flow analysis is unable to consider uncertainty.
+The authors acknowledge this limitation and the importance of considering uncertainty in the architectural design and analysis \cite{seifermann_architectural_2022}.
+
+\textcite{boltz_model-based_2022} focus on the collaboration of legal and software experts in the assessment of information security and data protection.
+They propose a model-based approach using the data flow analysis framework \cite{boltz_extensible_2024} described in \autoref{sec:confidentialityanalysis:framework}.
+By using the \acf{ADL} \ac{PCM}, analyses of multiple quality properties are also possible, e.g., regarding performance and security \cite{boltz_modeling_2024}.
+However, their approach only considers uncertainty coming from the legal side.
+Here, combining our findings on modeling and analyzing uncertainty could be a promising approach.
+\textcite{pilipchuk_architectural_2021} present an access control analysis based on business processes to align processes and access control policies \cite{pilipchuk_aligning_2018}.
+By extracting access control requirements from business processes and using them in architecture-based data flow analysis, forbidden data flows can be identified.
+However, this approach also focuses on conformance without considering uncertainty.
+
+\textcite{peldszus_secure_2019} also present a data flow analysis approach called \emph{SecDFD}.
+They check for compliance between models of the design and the implementation to identify violations.
+The mapping is automated but lacks support for custom analysis definitions or data flow constraints and also does not consider uncertainty.
+The early detection of design flaws \cite{tuma_automating_2020,tuma_flaws_2019} is closely related to the aforementioned data flow analysis by \textcite{seifermann_detecting_2022} and was also a baseline for the unified modeling primitives for \acp{DFD} used in our work, see \autoref{sec:foundations:dfd}.
+Another approach is \emph{iFlow} by \textcite{katkalov_model-driven_2013}.
+They use \ac{UML} models to derive and analyze data flows.
+Furthermore, the generated source code can be verified.
+\textcite{gerking_model_2018} present a model-based information flow analysis to identify timing channels.
+Both approaches do not consider uncertainty, but \textcite{gerking_model-driven_2020} mentions the incorporation of uncertainty as potential future work.
+
+Last, \textcite{schneider_automatic_2023} present an automated approach to extract \acp{DFD} from the source code of microservice applications.
+They enrich the extracted \acp{DFD} with security-related information, e.g., regarding data storage, passwords, or logging.
+This enables comprehensive data flow analysis that also considers architectural information.
+They also published a large data set comprising the \acp{DFD} of 17 real-world microservice systems \cite{schneider_microsecend_2023}.
+In a proof of concept, we transformed and analyzed this data set using our data flow analysis framework \cite{boltz_extensible_2024} to replicate the identified confidentiality violations.
+There are also other steps towards security benchmarks \cite{bambhore_tukaram_towards_2022}.
+We state that this represents a promising first step towards comprehensive data flow analysis that considers both the information from the source code and the software architecture.
+However, similar to the previously discussed approaches, uncertainty is not considered. 
+
+
+\subsection{Modeling Confidentiality Requirements}
+
+The data flow analysis approaches presented in this thesis use confidentiality requirements in the form of data flow constraints as input, see \autoref{sec:foundations:dfd}.
+Similarly, many related approaches discussed in the previous paragraphs use a dedicated requirement specification language.
+Often, confidentiality requirements are also specified using access control \cite{nguyen_extensive_2015}.
+The specification of confidentiality requirements impacts the identified confidentiality violations, with our without considering uncertainty.
+We briefly summarize related work in both fields in the following.
+
+\textcite{onabajo_properties_2006} investigated the properties of confidentiality requirements using grounded theory.
+They present a model for requirements comprising elements like data, stakeholders, statements, purpose, and temporal validity.
+This shall support the precise definition of requirements and enable the formal reasoning on derived rules, e.g., from legal frameworks like the \acf{GDPR} \cite{council_of_european_union_regulation_2016}.
+To provide a foundation to describe such confidentiality requirements for data flow analysis, we presented a meta model and a \ac{DSL} in previous work \cite{hahner_modeling_2021}.
+Data flow constraints follow the pattern of disallowing flows under certain conditions based on the characteristics of the data and involved entities or parts of the system.
+A generalized form of this \ac{DSL} was presented with the data flow analysis framework \cite{boltz_extensible_2024}.
+However, these approaches are not able to express restrictions with regard to uncertainty, e.g., whether certain flows shall not be allowed under given uncertain conditions.
+Here, more research is required.
+
+As discussed previously, access control is often used to express confidentiality requirements through access control policies \cite{seifermann_architectural_2022}.
+To guide software architects from high-level requirements to low-level policies, access control policy refinement techniques have been proposed \cite{yang_security_2013}.
+Su et al. \cite{linying_su_automated_2005} discuss the automated decomposition of policies based on the resource hierarchy in distributed applications.
+\textcite{he_requirements-based_2009} present an approach to define and refine access control policies by analyzing the specification of requirements and the system's database design.
+Furthermore, both model-based \cite{massacci_model-driven_2008,maeder_modeling_2020} and verification-based \cite{mery_specication_2007,cheminod_comprehensive_2019} approaches exist, e.g., using logic programming languages like Prolog \cite{craven_policy_2011,zhao_policy_2011}.
+Unfortunately, all of these approaches do not explicitly consider any kind of uncertainty.
+The relation of uncertainty, i.e., the lack of knowledge and the specification and refinement of access control policies that respect uncertainty represents an interesting direction for future work.
+
+
+\subsection{Summary}
+
+The intersection of research on software architecture and confidentiality shows a multitude of modeling and analysis approaches.
+Following the principle of security and privacy by design \cite{schaar_privacy_2010}, the early consideration and analysis of security and privacy is expedient.
+Moreover, fixing issues in later phases is usually more costly \cite{shull_what_2002,boehm_software_2001}.
+Related work often uses a model representation to perform security analysis, e.g., based on \ac{UML}, \acp{DFD}, or the \ac{PCM}.
+Although we identified many promising approaches, we were unable to identify an architecture-based analysis that both considers confidentiality and uncertainty.
+Many approaches acknowledged this limitation \cite{walter_context-based_2023,seifermann_architectural_2022,gerking_model-driven_2020}.
+Nevertheless, especially our data flow analysis framework \cite{boltz_extensible_2024} is inspired by related work regarding architecture-based \cite{seifermann_architectural_2022} and code-based \cite{schneider_automatic_2023} data flow analysis.
+We repeat the conclusion of the previous section that these findings support the novelty of our work.
+Moreover, analysis combinations represent promising approaches, e.g., by closing the gap between the design and the implementation regarding confidentiality analysis under uncertainty.
+
+\finding{Related work shows a multitude of security analysis approaches supporting confidentiality based on models specified using the \ac{UML}, \ac{PCM}, or \acp{DFD}.
+Despite their versatility, they lack support for considering uncertainty within the modeling and analysis of confidentiality.}
+
+
+
+
+
+\section{Confidentiality and Uncertainty}%
+\label{sec:relatedwork:confidentialityXuncertainty}
+
+The last section of related work discussed in this chapter is the intersection of research on confidentiality and uncertainty.
+This represents the smallest part of related work as we were unable to identify comprehensive approaches that consider confidentiality under uncertainty.
+The aforementioned surveys \cite{troya_uncertainty_2021,sobhy_evaluation_2021} support this shortcoming, as only a few identified approaches explicitly target security; confidentiality is not mentioned at all.
+We split related work into two groups: uncertainty-aware confidentiality analysis and access control under uncertainty to ensure confidentiality.
+
+
+\subsection{Uncertainty-Aware Confidentiality Analysis}
+
+We identified two approaches to confidentiality analysis under uncertainty.
+First, work regarding uncertainty in cloud computing and, second, work regarding risk assessment of data breaches.
+\textcite{tchernykh_towards_2019} discuss different types of uncertainty in the context of cloud computing.
+Moreover, they propose approaches to minimize the impact of uncertainty on the systems' reliability and privacy, e.g., data replication, error correction, and homomorphic encryption.
+However, the presented work is still in a preliminary state and lacks modeling or automated analysis.
+
+\textcite{morali_it_2008} focus on the assessment of risk regarding confidentiality.
+By propagating data breaches through the modeled software system, the criticality can be measured.
+The software system is modeled as a graph showing the dependencies between infrastructure nodes regarding exchanged information.
+Edges of this graph are annotated with the propagation likelihood of attackers, which enables the modeling of risk.
+However, it is not specified how software architects should be able to annotate every edge with an appropriate propagation likelihood and the evaluation only comprises a single case study.
+The authors state further studies as future work.
+Although we assume that also this approach is still preliminary, the modeling of data dependencies and the propagation of attackers is promising.
+The analysis is related to the work to \textcite{walter_architecture-based_2023-1} but requires high modeling effort and does also not claim any automation.
+
+
+\subsection{Access Control Under Uncertainty}
+
+As discussed previously, access control represents a common approach to ensure the confidentiality of data in software systems.
+Here, many approaches to access control under uncertainty exist.
+Although these approaches are not directly comparable to our approach of architecture-based modeling and analysis of confidentiality under uncertainty, they comprise related concepts like fuzziness and taking known uncertainty into account.  
+
+\textcite{bures_capturing_2020} discuss the relation of uncertainty and access control in highly dynamic environments like Industry 4.0.
+Here, uncertainty-aware access control policies directly consider imperfect information in modeling access decisions.
+\textcite{hengartner_distributed_2007} present an access control model for distributed systems that incorporates trust by explicitly specifying remaining uncertainty in access decisions. 
+Other approaches regarding uncertainty in access control also utilize fuzzy logic, e.g., to represent security patterns \cite{hosmer_using_1992} or to create risk-adaptive access control models to cope with the uncertainty \cite{cheng_fuzzy_2007}. 
+Numerous other approaches also discuss fuzzy approaches to access control \cite{ni_risk-based_2010,martinez-garcia_fuzzy_2011,salim_approach_2011,molloy_risk-based_2012,mahalle_fuzzy_2013,santos_dynamic_2014}.
+Only a few take the described \emph{known uncertainty} into account when making access decisions \cite{ardagna_supporting_2006,cuppens_modelling_2003}.
+
+However, details about such policies are usually not specified in the architectural abstraction but are added during policy refinement. 
+Here, the high degree of uncertainty regarding the structure, behavior, and usage of the software does not allow one to draw precise conclusions on the confidentiality of the overall system. 
+\textcite{cheng_fuzzy_2007} explain this problem with unforeseeable tradeoffs while defining policies. 
+Strict policies may reduce the risk of data breaches but may harm the flexibility of software systems, especially in highly dynamic environments like implied by Industry 4.0 \cite{bures_capturing_2020}. 
+The common gap of uncertainty-aware approaches to model access control is the lack of refinement of high-level confidentiality requirements whose abstraction is also a source of uncertainty.
+In sum, uncertainty-aware access control can be seen as an alternative approach to deal with uncertainty in a software system \cite{perez-palacin_dealing_2014}.
+
+
+\subsection{Summary}
+
+As discussed previously, the intersection of confidentiality and uncertainty yields the least amount of related research.
+One reason could be the focus of the research community on other qualities like performance and reliability \cite{hezavehi_uncertainty_2021,sobhy_evaluation_2021}.
+Nevertheless, we identified related uncertainty-aware confidentiality analyses and numerous approaches to access control under uncertainty.
+Both fall in one of the two categories of handling uncertainty, discussed by \textcite{perez-palacin_dealing_2014}.
+The model can be refined to incorporate the uncertainty and become more resilient, like the approach to consider uncertainty in cloud computing by \textcite{tchernykh_towards_2019}.
+Otherwise, the uncertainty can be actively managed as part of the model, e.g., in fuzzy access control policies \cite{cheng_fuzzy_2007,ni_risk-based_2010,martinez-garcia_fuzzy_2011}.
+
+\finding{Related work comprises only a few approaches to uncertainty-aware confidentiality analysis.
+The identified approaches are of a preliminary nature and lack comprehensive modeling and automated analysis support.}
+
+
+
+
+
+\section{Summary and Outlook}%
+\label{sec:relatedwork:summary}
+
+In this chapter, we provided an overview of the related work.
+First, we focused on work from the areas of software architecture and uncertainty.
+Here, many surveys like \acp{SLR} and roadmaps have been discussed in the last decades.
+We investigated taxonomies related to our classification, introduced in \autoref{ch:classification}, and architecture-based analyses related to our impact analysis, introduced in \autoref{ch:impactanalysis}.
+Furthermore, we summarized the comprehensive state of the art in architecture evaluation that is related to our data flow analyses, introduced in \autoref{ch:confidentialityanalysis}.
+Last, we revisited the relation of \acp{ADD} and uncertainty and existing approaches to uncertainty management.
+
+In the second part of this chapter, we investigated work regarding software architecture and confidentiality.
+Here, many model-based security analyses and data flow analyses have been proposed.
+They share common approaches like design time modeling and analysis or using propagation to better assess the system's security.
+In the last part of this chapter, we discussed work that considers confidentiality under uncertainty, which yielded the smallest amount of publications.
+Here, we summarized existing uncertainty-aware confidentiality analyses and access control under uncertainty.
+
+In sum, we provided a comprehensive yet comprehensible overview of the state of the art.
+By comparing our results from the individual sections, we can derive two initial findings on related work.
+First, related work often covers two, but not all three aspects of our approaches: Architectural uncertainty-aware analysis do not focus on confidentiality, architecture-based confidentiality analysis do not consider uncertainty, and uncertainty-aware confidentiality analysis lack the architectural abstraction.
+Second, our impression of related work supports the results from the aforementioned surveys \cite{troya_uncertainty_2021,hezavehi_uncertainty_2021}, e.g., the lack of supporting heterogeneous uncertainty, the lack of consolidated notions of uncertainty and providing tool support, or the challenge of end-to-end approaches \cite{weyns_introduction_2020}.
+
+However, recent advances like the \ac{OMG} \ac{PSUM} standardization process \cite{PSUM}, or the research agenda to understand and manage uncertainty \cite{weyns_towards_2023} show that the community is well aware of these challenges and actively addresses them.
+We hope that the contributions of this thesis, which were designed with these challenges in mind, also contribute to this research.
+Ultimately, please note that this related work chapter does not present a \ac{SLR}.
+Thus, it is possible---and even probable---that we missed some related publications.
+
+This chapter summarized work related to our contributions.
+These contributions are presented in \readingpath{ch:classification}, \readingpath{ch:impactanalysis}, and \readingpath{ch:confidentialityanalysis}.
+To learn more about the foundations, see \readingpath{ch:foundations}.
+Next, we will conclude this thesis in \readingpath{ch:conclusion}.
+
+
+
+
+
+\section{In Simpler Words}%
+\label{sec:relatedwork:simple}
+
+Our research is part of three major research communities.
+First, the software architecture community researches how we can design better architectures to enhance the quality of software systems.
+Second, the \acfp{SAS} community researches how we can build more flexible systems that adapt themselves when facing uncertainty.
+Third, the security community researches how to analyze and ensure security-related properties like confidentiality.
+In all three communities, many ideas are related to our work.
+In this chapter, we give an overview of the most related publications.
+
+First, we look into architecture-based approaches that also consider uncertainty.
+Here, many researchers proposed methods to optimize software architectures regarding uncertainty and to help software architects make better decisions when designing software systems under uncertainty.
+We learned a lot from these approaches and tried to address the identified shortcomings in our contributions.
+Second, we look into architecture-based approaches to analyze confidentiality.
+Here, some of the most related work exists, e.g., the data flow analysis that inspired our data flow analysis framework, presented in \autoref{ch:confidentialityanalysis}.
+However, these approaches do not consider uncertainty and thus do not solve the problem we want to address with our work.
+Third, we look into work that tries to understand confidentiality while considering uncertainty.
+Here, we only found a few related publications, some of which are in a preliminary state.
+In sum, we did not find a single publication that does exactly what we propose in this thesis---which is a good thing, because otherwise, the novelty of our work would be limited.

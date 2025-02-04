@@ -1,0 +1,50 @@
+% GQM plan (medium overengineered)
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta, arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{backgrounds}
+
+
+\newcommand{\gqmIndent}[0]{0.8em}
+\newcommand{\gqmSpace}[0]{1em}
+
+\newcommand{\goal}[1]{\hyperref[gqm:g:#1]{\textbf{G#1}}}
+\newcommand{\question}[2]{\hyperref[gqm:q:#1:#2]{\textbf{Q#1.#2}}}
+\newcommand{\metric}[3]{\hyperref[gqm:m:#1:#2:#3]{\textbf{M#1.#2.#3}}}
+
+\newcommand{\nodeGtop}[2]{\node[draw, rectangle, fill=black!4!white, minimum height=2em, anchor=north west, text width=\textwidth -\gqmIndent] (G#1) at (0, 0) {\label{gqm:g:#1}\hyperref[gqm:text:g:#1]{\textbf{G#1}}: #2};}
+\newcommand{\nodeGbottom}[3]{\node[draw, rectangle, fill=black!4!white, minimum height=2em, anchor=north west, text width=\textwidth -\gqmIndent] (G#1) at ($(#3.south west) + (-4*\gqmIndent,-1.5\gqmSpace)$) {\label{gqm:g:#1}\hyperref[gqm:text:g:#1]{\textbf{G#1}}: #2};}
+
+\newcommand{\nodeQtop}[4]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 3*\gqmIndent] (Q#1#2) at ($(#4.south west) + (2*\gqmIndent,-\gqmSpace)$) {\label{gqm:q:#1:#2}\hyperref[gqm:text:q:#1:#2]{\textbf{Q#1.#2}}: #3};%
+\draw ($(Q#1#2.west) + (-\gqmIndent,0)$) -- (Q#1#2.west);}
+\newcommand{\nodeQmid}[4]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 3*\gqmIndent] (Q#1#2) at ($(#4.south west) + (-2*\gqmIndent,-\gqmSpace)$) {\label{gqm:q:#1:#2}\hyperref[gqm:text:q:#1:#2]{\textbf{Q#1.#2}}: #3};%
+\draw ($(Q#1#2.west) + (-\gqmIndent,0)$) -- (Q#1#2.west);}
+\newcommand{\nodeQbottom}[4]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 3*\gqmIndent] (Q#1#2) at ($(#4.south west) + (-2*\gqmIndent,-\gqmSpace)$) {\label{gqm:q:#1:#2}\hyperref[gqm:text:q:#1:#2]{\textbf{Q#1.#2}}: #3};%
+\draw ($(G#1.south west) + (\gqmIndent,0)$) |- (Q#1#2.west);}
+\newcommand{\nodeQonly}[4]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 3*\gqmIndent] (Q#1#2) at ($(#4.south west) + (2*\gqmIndent,-\gqmSpace)$) {\label{gqm:q:#1:#2}\hyperref[gqm:text:q:#1:#2]{\textbf{Q#1.#2}}: #3};%
+\draw ($(G#1.south west) + (\gqmIndent,0)$) |- (Q#1#2.west);}
+
+\newcommand{\nodeMtop}[5]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 5*\gqmIndent] (M#1#2#3) at ($(#5.south west) + (2*\gqmIndent,-\gqmSpace)$) {\label{gqm:m:#1:#2:#3}\hyperref[gqm:text:m:#1:#2:#3]{\textbf{M#1.#2.#3}}: #4};%
+\draw ($(M#1#2#3.west) + (-\gqmIndent,0)$) -- (M#1#2#3.west);}
+\newcommand{\nodeMmid}[5]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 5*\gqmIndent] (M#1#2#3) at ($(#5.south west) + (0,-\gqmSpace)$) {\label{gqm:m:#1:#2:#3}\hyperref[gqm:text:m:#1:#2:#3]{\textbf{M#1.#2.#3}}: #4};%
+\draw ($(M#1#2#3.west) + (-\gqmIndent,0)$) -- (M#1#2#3.west);}
+\newcommand{\nodeMbottom}[5]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 5*\gqmIndent] (M#1#2#3) at ($(#5.south west) + (0,-\gqmSpace)$) {\label{gqm:m:#1:#2:#3}\hyperref[gqm:text:m:#1:#2:#3]{\textbf{M#1.#2.#3}}: #4};%
+\draw ($(Q#1#2.south west) + (\gqmIndent,0)$) |- (M#1#2#3.west);}
+\newcommand{\nodeMonly}[5]{%
+\node[draw, rectangle, minimum height=2em, anchor=north west, text width=\textwidth - 5*\gqmIndent] (M#1#2#3) at ($(#5.south west) + (2*\gqmIndent,-\gqmSpace)$) {\label{gqm:m:#1:#2:#3}\hyperref[gqm:text:m:#1:#2:#3]{\textbf{M#1.#2.#3}}: #4};%
+\draw ($(Q#1#2.south west) + (\gqmIndent,0)$) |- (M#1#2#3.west);}
+
+\newcommand{\recallFormula}[0]{\emph{recall} = \frac{TP}{TP + FN}}
+\newcommand{\precisionFormula}[0]{\emph{precision} = \frac{TP}{TP + FP}}
+\newcommand{\recallFormulaFull}[0]{\recallFormula \in [0,1]}
+\newcommand{\precisionFormulaFull}[0]{\precisionFormula \in [0,1]}
+
+\newcommand{\GQMquestionsIndent}[0]{2.5em}

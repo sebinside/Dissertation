@@ -1,0 +1,35 @@
+% WIP commands
+\newcommand{\task}[1]{\todo[inline,color=yellow]{#1}}
+\newcommand{\NA}[0]{\hl{???}\xspace}
+\newcommand{\needCite}[0]{\hl{[x]}\xspace}
+
+% Symbols
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+% Tool support
+\newcommand{\uff}[1]{\underline{\textbf{#1}}}
+\newcommand{\toolsupporticon}[0]{\faWrench}
+\newcommand{\arcen}[0]{\hyperref[sec:overview:toolsupport]{\toolsupporticon~ARC\textsuperscript{3}N}\xspace}
+\newcommand{\uia}[0]{\hyperref[sec:overview:toolsupport]{\toolsupporticon~~UIA}\xspace}
+\newcommand{\abunai}[0]{\hyperref[sec:overview:toolsupport]{\toolsupporticon~\textsc{Abunai}}\xspace}
+
+% Future Work
+\newcommand{\FW}[1]{\textbf{FW#1}\xspace}
+
+% Reading paths
+\newcommand{\readingpath}[1]{\faChevronCircleRight~\textbf{\hyperref[#1]{\autoref*{#1}: \nameref*{#1}}}}
+
+% Own publications part
+\newcommand{\ownpublications}[1]{\highlight{\faBook}{Literature}{%
+This chapter is based on the following (co-) authored publications:\xspace\linebreak#1}}
+
+% Redefinitions
+\addto\extrasenglish{
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Subsection}
+}
+
+% Dirty hack for scientific notation not to be used elsewhere
+\sisetup{output-exponent-marker=\ensuremath{\text{e+0}}}

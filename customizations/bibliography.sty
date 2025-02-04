@@ -1,0 +1,79 @@
+\RequirePackage{hyperref}
+
+\usepackage[%
+	sortcites, % [1,2,3] instead of [2,3,1]
+	citestyle=numeric,
+	style=numeric,
+	doi=false,isbn=false,url=false,% no long URLs except for online resources
+	giveninits=true,% abbreviate first names
+	hyperref,% clickable citations
+	maxcitenames=2,% truncate author lists in citations
+	maxbibnames=99,
+	labelnumber,%  pass number of the bibliography entry to bibliography driver for numeric citation schemes
+	backend=biber
+]{biblatex}
+
+\AtEveryBibitem{% Clean up the reference list rather than editing the entries
+	\clearname{editor}%
+	\clearlist{language}%
+	\clearfield{month}%
+	\clearlist{location}%
+	\clearfield{venue}
+%	\clearfield{series}
+	\clearfield{address}
+}
+\AtEveryCitekey{% Clean up citations rather than editing the entries
+	\clearname{editor}%
+}
+
+% BEGIN link bib entries trying first doi then url
+% from http://tex.stackexchange.com/questions/48400/biblatex-make-title-hyperlink-to-dois-url-or-isbn
+\usepackage{ifdraft}
+\newbibmacro{string+doiurlisbn}[1]{%
+	\iffieldundef{doi}{%
+		\iffieldundef{url}{%
+			\ifdraft{\PackageWarning{bibliography}{URL/DOI missing for entry: \thefield{author}, \thefield{title}}}{}
+	 		#1
+		}{%
+			\href{\thefield{url}}{#1}%
+		}%
+	}{%
+		\href{http://dx.doi.org/\thefield{doi}}{#1}%
+	}%
+}
+\DeclareFieldFormat{title}{\usebibmacro{string+doiurlisbn}{\mkbibemph{#1}}}
+\DeclareFieldFormat[article,incollection,inbook,inproceedings,thesis]{title}%
+    {\usebibmacro{string+doiurlisbn}{\mkbibquote{#1}}}
+% END link bib entries trying first doi then url
+
+% Really fancy cite style
+\newbibmacro*{cite:authoryear}{%
+  \printtext[bibhyperref]{%
+    \iffieldundef{shorthand}
+      {\ifthenelse{\ifnameundef{labelname}\OR\iffieldundef{labelyear}}
+         {\usebibmacro{cite:label}%
+          \setunit{\printdelim{nonameyeardelim}}}
+         {\printnames{labelname}%
+          \setunit{\printdelim{nameyeardelim}}}%
+       \usebibmacro{cite:labeldate+extradate}}
+      {\usebibmacro{cite:shorthand}}}}
+
+\newbibmacro*{cite:shorthand}{%
+  \printfield{shorthand}}
+
+\newbibmacro*{cite:label}{%
+  \iffieldundef{label}
+    {\printfield[citetitle]{labeltitle}}
+    {[\printfield{label}]}}
+
+\newbibmacro*{cite:labeldate+extradate}{%
+  \iffieldundef{labelyear}
+    {}
+    {\printtext[parens]{\printlabeldateextra}}}
+
+\DeclareCiteCommand{\fancycite}
+  {\usebibmacro{prenote}}%
+  {\usebibmacro{citeindex}%
+   \usebibmacro{cite:authoryear}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}

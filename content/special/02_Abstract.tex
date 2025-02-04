@@ -1,0 +1,97 @@
+\selectlanguage{english}
+\Abstract{%
+% Short Abstract
+In this dissertation, we investigate architecture-based confidentiality analysis under uncertainty.
+We present a classification of uncertainty regarding confidentiality, a catalog of uncertainty sources, an uncertainty impact analysis that propagates uncertainty to predict its impact on the system's confidentiality, and uncertainty-aware confidentiality analyses that identify violations of confidentiality requirements with respect to uncertainty.
+
+% Motivation
+In our interconnected world, an increasing amount of data is exchanged, processed and stored every day.
+This enables a multitude of modern applications in many domains, from mobility to healthcare, but it also presents significant challenges.
+A particular challenge is confidentiality, which requires that information is not made available to unauthorized individuals or organizations.
+The rise of cybercrime and the ubiquity of data breaches underline the relevance of confidentiality, as its loss can significantly impact stakeholder wealth and social acceptance.
+As demanded by approaches like privacy and security by design, confidentiality should be addressed and analyzed early in the development, e.g., on the abstraction of the software's architecture.
+Here, numerous architecture-based analysis approaches have been proposed.
+Based on the assessment of architectural models, these analyses can accurately and early identify violations of confidentiality requirements.
+
+% Problem
+However, today's software systems are neither built nor operated in isolation and are subject to uncertainty within the software system, its design, or its environment.
+Uncertainty, often referred to as a lack of knowledge or information, is inherently unavoidable in modern, interconnected software systems.
+When not handled comprehensively, confidentiality violations can occur due to uncertainty that voids previous analysis results, e.g., because influences from the system context have not been adequately considered or users and third parties behave differently than assumed.
+Addressing this problem requires new approaches to identify and document uncertainty sources, as one cannot analyze what one does not know.
+Software architects face challenges both in the inspection of software architectures and in assessing confidentiality under uncertainty.
+
+% Gap
+Although architecture evaluation under uncertainty has been comprehensively researched, existing approaches focus on other quality properties like performance, cost, or reliability but do not consider confidentiality.
+On the opposite, existing design time confidentiality analyses fall short of considering the impact of uncertainty on confidentiality.
+Recent surveys and road maps also find a lack of uncertainty management, accurate representation of uncertainty sources, and uncertainty-aware end-to-end approaches.
+
+% Contribution
+In this dissertation, we address this lack of simultaneous consideration of uncertainty and confidentiality in architecture-based analysis.
+We present an approach to identifying, classifying, propagating, and analyzing uncertainty and its impact on a system's confidentiality using the architectural abstraction.
+First, we present a classification of uncertainty regarding confidentiality that provides the terminology to understand and discuss the relation between uncertainty and confidentiality.
+We complement this classification with a catalog of uncertainty sources that simplifies their identification and addresses the lack of awareness.
+Second, we introduce an architecture-based uncertainty impact analysis.
+By propagating uncertainty within the software architecture, software architects can predict potential confidentiality violations with minimal effort.
+Third, we present uncertainty-aware confidentiality analyses.
+These analyses consider uncertainty sources as first-class entities in the software architecture and identify confidentiality violations due to uncertainty.
+
+% Evaluation
+We validate our contributions using six evaluation scenarios and by conducting two user studies.
+In addition to investigating the quality of our classification, we evaluate the usability of our catalog approach and the accuracy of all of our analyses.
+Furthermore, we inspect the effort reduction of our uncertainty impact analysis and the scalability of the confidentiality analyses under uncertainty.
+The results of the user studies indicate that combining the classification with our catalog of uncertainty sources helps to identify and describe uncertainty sources.
+Afterward, the uncertainty impact analysis can accurately predict the impact with an F1-score of 0.88 while greatly reducing the effort by 86\% compared to manual analysis.
+Last, uncertainty-aware confidentiality analyses accurately identify confidentiality violations with high precision and recall while significantly reducing the analysis runtime compared to the state of the art.
+
+% Benefits
+Our work benefits software architects by helping them more accurately identify confidentiality violations by considering uncertainty within the software and its context.
+Applying our tool-supported and automated analyses requires both less effort and less expertise.
+Last, it has already been shown that our findings can be generalized to other research concerns, e.g., regarding uncertainty propagation and interaction in self-adaptive systems.
+%
+}
+
+%% Deutsche Zusammenfassung
+\selectlanguage{ngerman}
+\Abstract[Zusammenfassung]{%
+In dieser Dissertation untersuchen wir die architekturbasierte Analyse von Vertraulichkeit unter Ungewissheit.
+Wir präsentieren eine Klassifikation von Ungewissheit mit Bezug auf Vertraulichkeit, einen Katalog von Ungewissheitsquellen, eine Ungewissheitsauswirkungsanalyse, die Ungewissheit propagiert, um ihre Auswirkungen auf die Vertraulichkeit eines Systems vorherzusagen, und Vertraulichkeitsanalysen unter Ungewissheit, die Verletzungen von Vertraulichkeitsanforderungen unter Berücksichtigung von Ungewissheit identifizieren.
+
+In unserer vernetzten Welt werden täglich immer größere Datenmengen ausgetauscht, verarbeitet und gespeichert.
+Dies ermöglicht eine Vielzahl moderner Anwendungen in vielen Bereichen, von Mobilitätssystem bis zur Gesundheitsbranche, bringt aber auch erhebliche Herausforderungen mit sich.
+Eine besondere Herausforderung ist die Vertraulichkeit, welche fordert, dass Informationen nicht an unbefugte Personen oder Organisationen weitergegeben werden dürfen.
+Der Anstieg der Cyberkriminalität und die Allgegenwart von Datenschutzverletzungen unterstreichen die Relevanz von Vertraulichkeit, da ihr Verlust erhebliche Auswirkungen auf den Wohlstand der Betroffenen und die gesellschaftliche Akzeptanz haben kann.
+Wie von Ansätzen wie Sicherheit und Datenschutz durch Technikgestaltung gefordert, sollte die Vertraulichkeit bereits in der frühen Entwicklung berücksichtigt und analysiert werden, z. B. auf der Abstraktionsebene der Softwarearchitektur.
+Hier wurden zahlreiche architekturbasierte Analyseansätze vorgeschlagen.
+Auf der Grundlage der Bewertung von Architekturmodellen können diese Analysen Verstöße gegen Vertraulichkeitsanforderungen genau und frühzeitig erkennen.
+
+Heutige Softwaresysteme werden jedoch weder isoliert entwickelt noch betrieben und unterliegen Ungewissheiten innerhalb des Softwaresystems, seines Entwurfs, oder seiner Umgebung.
+Ungewissheit, die oft als Mangel an Wissen oder Informationen bezeichnet wird, ist in modernen, vernetzten Softwaresystemen unvermeidlich.
+Wenn sie nicht umfassend gehandhabt wird, kann es zu Vertraulichkeitsverletzungen kommen, weil die Ungewissheit frühere Analyseergebnisse invalidiert, z. B. weil Einflüsse aus dem Systemkontext nicht angemessen berücksichtigt wurden oder weil sich Benutzer und Dritte anders verhalten als ursprünglich angenommen.
+Die Lösung dieses Problems erfordert neue Ansätze zur Identifizierung und Dokumentation von Ungewissheitsquellen, da man nicht analysieren kann, was man nicht kennt.
+Softwarearchitektinnen und Softwarearchitekten stehen vor Herausforderungen sowohl bei der Prüfung von Softwarearchitekturen als auch bei der Bewertung der Vertraulichkeit unter Ungewissheit.
+
+Obwohl die Bewertung von Architekturen unter Ungewissheit umfassend erforscht wurde, konzentrieren sich bestehende Ansätze auf andere Qualitätseigenschaften wie Leistung, Kosten oder Zuverlässigkeit, berücksichtigen aber nicht die Vertraulichkeit.
+Umgekehrt werden bei bestehenden Analysen der Vertraulichkeit während der Entwurfszeit die Auswirkungen der Ungewissheit auf die Vertraulichkeit nicht berücksichtigt.
+Jüngste Studien zeigen auch einen Mangel an Ungewissheitsmanagement, genauer Darstellung von Ungewissheitsquellen und Ende-zu-Ende-Ansätzen, die Ungewissheit berücksichtigen.
+
+In dieser Dissertation befassen wir uns mit der fehlenden gleichzeitigen Berücksichtigung von Unsicherheit und Vertraulichkeit in architekturbasierten Analysen.
+Es wird ein Ansatz zur Identifizierung, Klassifikation, Propagation und Analyse von Ungewissheit und deren Auswirkungen auf die Vertraulichkeit eines Systems unter Verwendung der Architekturabstraktion vorgestellt.
+Zunächst stellen wir eine Klassifikation der Ungewissheit in Bezug auf die Vertraulichkeit vor, die die Terminologie für das Verständnis und die Diskussion der Beziehung zwischen Ungewissheit und Vertraulichkeit zur Verfügung stellt.
+Wir ergänzen diese Klassifikation durch einen Katalog von Ungewissheitsquellen, der deren Identifizierung vereinfacht und den Mangel an Bewusstsein behebt.
+Zweitens führen wir eine architekturbasierte Analyse der Auswirkungen von Ungewissheit ein.
+Durch die Propagation von Ungewissheit innerhalb der Softwarearchitektur können Softwarearchitektinnen und Softwarearchitekten potenzielle Vertraulichkeitsverletzungen mit minimalem Aufwand vorhersagen.
+Drittens stellen wir auf Ungewissheit basierende Vertraulichkeitsanalysen vor.
+Diese Analysen betrachten Ungewissheitsquellen als Entitäten erster Klasse in der Softwarearchitektur und identifizieren Vertraulichkeitsverletzungen aufgrund von Ungewissheit.
+
+Wir validieren unsere Beiträge anhand von sechs Evaluationsszenarien und zwei Nutzerstudien.
+Zusätzlich zur Untersuchung der Qualität unserer Klassifikation evaluieren wir die Benutzerfreundlichkeit unseres Katalogansatzes und die Genauigkeit aller unserer Analysen.
+Darüber hinaus untersuchen wir die Aufwandsreduktion unserer Ungewissheitsauswirkungsanalyse und die Skalierbarkeit der Vertraulichkeitsanalysen unter Ungewissheit.
+Die Ergebnisse der Nutzerstudien zeigen, dass die Kombination der Klassifikation mit unserem Katalog der Ungewissheitsquellen hilft, Ungewissheitsquellen zu identifizieren und zu beschreiben.
+Anschließend kann die Ungewissheitsauswirkungsanalyse die Auswirkungen mit einem F1-Score von 0,88 genau vorhersagen und gleichzeitig den Aufwand im Vergleich zur manuellen Analyse um 86\% reduzieren.
+Schließlich werden durch die Analyse von Ungewissheiten in Bezug auf die Vertraulichkeit Verstöße gegen die Vertraulichkeit mit hoher Präzision und Ausbeute identifiziert, während die Laufzeit der Analyse im Vergleich zum Stand der Technik erheblich reduziert wird.
+
+Unsere Arbeit kommt Softwarearchitektinnen und Softwarearchitekten zugute, indem sie ihnen hilft, Vertraulichkeitsverletzungen genauer zu identifizieren, indem sie die Ungewissheit innerhalb der Software und ihres Kontexts berücksichtigt.
+Die Anwendung unserer werkzeuggestützten und automatisierten Analysen erfordert sowohl weniger Aufwand als auch weniger Expertenwissen.
+Schließlich wurde bereits gezeigt, dass unsere Erkenntnisse auf andere Forschungsfragen verallgemeinert werden können, z. B. in Bezug auf die Propagation und Interaktion von Ungewissheit in selbstadaptiven Systemen.
+%
+}

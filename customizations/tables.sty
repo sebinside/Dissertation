@@ -1,0 +1,21 @@
+% Right aligned X in tabularx tables
+\newcolumntype{Z}{>{\raggedleft\arraybackslash}X}
+
+% Custom table formatting
+\newcommand{\category}[2]{\textbf{#1}: #2 &}
+\newcommand{\optionlist}[1]{#1\\}
+\newcommand{\option}[2]{\textbf{#1}: #2;}
+\newcommand{\lastoption}[2]{\textbf{#1}: #2}
+\newcommand{\mtl}[1]{\makecell[tl]{#1}}
+
+\newcommand{\tableheading}[2]{\multicolumn{2}{p{\textwidth}}{\makecell[l]{\textbf{#1}: #2}}\\}
+\newcommand{\tableentry}[2]{#1 & #2\\}
+\newcommand{\classificationtags}[3]{\textsc{#1}, \textsc{#2}, \textsc{#3}}
+
+% Rotate columns
+\newcolumntype{R}[2]{%
+    >{\adjustbox{angle=#1,lap=\width-(#2)}\bgroup}%
+    l%
+    <{\egroup}%
+}
+\newcommand*\rot{\multicolumn{1}{R{30}{1em}}}
